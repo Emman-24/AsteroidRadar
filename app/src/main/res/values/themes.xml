@@ -1,0 +1,22 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.AsteroidRadar" parent="Theme.Material3.DayNight">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+    </style>
+
+    <style name="Theme.AsteroidRadar" parent="Base.Theme.AsteroidRadar" />
+
+
+    <style name="DetailSubtitleTextAppearance" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="DetailValueTextAppearance" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/default_text_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>
