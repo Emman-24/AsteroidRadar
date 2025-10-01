@@ -1,6 +1,5 @@
 package com.emman.android.asteroidradar.utils
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -43,7 +42,6 @@ fun bindImageText(imageText: View, status: NasaApiStatus?) {
 
 @BindingAdapter("recyclerStatus")
 fun bindRecyclerView(recyclerView: View, status: NasaApiStatus) {
-    Log.e("MenuFragment", "bindRecyclerView: $status")
     when (status) {
         NasaApiStatus.LOADING, NasaApiStatus.DONE -> {
             recyclerView.visibility = View.VISIBLE

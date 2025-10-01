@@ -19,21 +19,21 @@ import java.util.Locale
 class AsteroidRepositoryImpl(private val database: AsteroidDatabase) : AsteroidRepository {
 
     override suspend fun getAsteroids(): List<Asteroid> {
-        val today = getFormattedDate(0)
         return withContext(Dispatchers.IO) {
             try {
                 val asteroids: List<Asteroid> = fetchAsteroidsFromNetwork()
                 if (asteroids.isNotEmpty()) {
                     saveAsteroidToDatabase(asteroids)
                 }
-                val dbAsteroids = database.asteroidDao.getAsteroidsFromDate(today)
+                val dbAsteroids = database.asteroidDao.getAllAsteroids()
                 return@withContext dbAsteroids.map { it.toDomainModel() }
-            } catch (e: Exception) {
-                val dbAsteroids = database.asteroidDao.getAsteroidsFromDate(today)
+            } catch (_: Exception) {
+                val dbAsteroids = database.asteroidDao.getAllAsteroids()
                 return@withContext dbAsteroids.map { it.toDomainModel() }
             }
         }
     }
+
 
     suspend fun refreshAsteroids() {
         withContext(Dispatchers.IO) {
@@ -68,6 +68,28 @@ class AsteroidRepositoryImpl(private val database: AsteroidDatabase) : AsteroidR
     override suspend fun getAsteroid(id: Long): Asteroid {
         return withContext(Dispatchers.IO) {
             database.asteroidDao.getAsteroidById(id).toDomainModel()
+        }
+    }
+
+    suspend fun getTodayAsteroids(): List<Asteroid> {
+        val today = getFormattedDate(0)
+        return withContext(Dispatchers.IO) {
+            database.asteroidDao.getAsteroidsFromDate(today).map { it.toDomainModel() }
+        }
+    }
+
+    suspend fun getSavedAsteroids(): List<Asteroid> {
+        return withContext(Dispatchers.IO) {
+            database.asteroidDao.getAllAsteroids().map { it.toDomainModel() }
+        }
+    }
+
+    suspend fun getWeekAsteroids(): List<Asteroid> {
+        val today = getFormattedDate(0)
+        val endOfWeek = getFormattedDate(6)
+        return withContext(Dispatchers.IO) {
+            database.asteroidDao.getAsteroidsFromDateRange(today, endOfWeek)
+                .map { it.toDomainModel() }
         }
     }
 

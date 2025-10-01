@@ -18,4 +18,7 @@
     <string name="this_is_nasa_s_picture_of_day_showing_nothing_yet">Esta es la imagen del día de la NASA, que aún no muestra nada.</string>
     <string name="nasa_picture_of_day_content_description_format">Imagen del día de la NASA: %s</string>
     <string name="help_absolute_magnitude">Ayuda sobre la magnitud absoluta</string>
+    <string name="view_week_asteroids">Ver asteroides semanales</string>
+    <string name="view_today_asteroids">Ver asteroides de hoy</string>
+    <string name="view_saved_asteroids">Ver asteroides guardados</string>
 </resources>

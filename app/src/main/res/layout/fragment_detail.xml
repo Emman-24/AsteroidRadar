@@ -98,6 +98,9 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/help_absolute_magnitude"
                     android:padding="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_help_circle" />
             </LinearLayout>
 

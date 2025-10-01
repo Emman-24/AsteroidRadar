@@ -2,19 +2,28 @@ package com.emman.android.asteroidradar.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.emman.android.asteroidradar.R
 import com.emman.android.asteroidradar.databinding.FragmentMenuBinding
 import com.emman.android.asteroidradar.presentation.adapter.AsteroidAdapter
 import com.emman.android.asteroidradar.presentation.adapter.AsteroidListener
 import com.emman.android.asteroidradar.presentation.viewmodels.MenuViewModel
+import com.emman.android.asteroidradar.presentation.viewmodels.MenuViewModelFactory
 
 class MenuFragment : Fragment() {
     private lateinit var binding: FragmentMenuBinding
-    private val viewModel: MenuViewModel by viewModels()
+    private val viewModel: MenuViewModel by viewModels {
+        MenuViewModelFactory(requireActivity().application)
+    }
+    private var menuProvider: MenuProvider? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,9 +34,38 @@ class MenuFragment : Fragment() {
         binding.viewModel = viewModel
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        menuProvider?.let { requireActivity().removeMenuProvider(it) }
+
+        menuProvider = object : MenuProvider {
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater,
+            ) {
+                menuInflater.inflate(R.menu.main_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.itemSavedAsteroids -> {
+                        viewModel.loadSavedAsteroids()
+                    }
+
+                    R.id.itemTodayAsteroids -> {
+                        viewModel.loadTodayAsteroids()
+                    }
+
+                    R.id.itemWeekAsteroids -> {
+                        viewModel.loadWeekAsteroids()
+                    }
+                }
+                return true
+            }
+        }
+        
+        requireActivity().addMenuProvider(menuProvider!!, viewLifecycleOwner)
 
         val adapter = AsteroidAdapter(
             AsteroidListener { asteroid ->

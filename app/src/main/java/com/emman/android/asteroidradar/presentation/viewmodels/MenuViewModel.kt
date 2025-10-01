@@ -1,9 +1,10 @@
 package com.emman.android.asteroidradar.presentation.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.emman.android.asteroidradar.data.local.getDatabase
 import com.emman.android.asteroidradar.data.repository.AsteroidRepositoryImpl
@@ -11,58 +12,98 @@ import com.emman.android.asteroidradar.domain.models.Asteroid
 import com.emman.android.asteroidradar.domain.models.PictureDay
 import kotlinx.coroutines.launch
 
-class MenuViewModel(application: Application) : AndroidViewModel(application) {
+class MenuViewModel(
+    private val repository: AsteroidRepositoryImpl
+) : ViewModel() {
 
-    private val database = getDatabase(application)
-    private val repository: AsteroidRepositoryImpl = AsteroidRepositoryImpl(database)
+    private val _asteroidStatus = MutableLiveData<NasaApiStatus?>()
+    val asteroidStatus: LiveData<NasaApiStatus?> = _asteroidStatus
 
-    private val _status = MutableLiveData<NasaApiStatus?>()
-    val status: LiveData<NasaApiStatus?> = _status
+    private val _imageStatus = MutableLiveData<NasaApiStatus?>()
+    val imageStatus: LiveData<NasaApiStatus?> = _imageStatus
 
-    private var _asteroids = MutableLiveData<List<Asteroid>>()
+    private val _asteroids = MutableLiveData<List<Asteroid>>()
     val asteroids: LiveData<List<Asteroid>> = _asteroids
 
-    private var _pictureOfTheDay = MutableLiveData<PictureDay?>()
+    private val _pictureOfTheDay = MutableLiveData<PictureDay?>()
     val pictureOfTheDay: LiveData<PictureDay?> = _pictureOfTheDay
 
-    private var _asteroid = MutableLiveData<Asteroid>()
+    private val _asteroid = MutableLiveData<Asteroid>()
     val asteroid: LiveData<Asteroid> = _asteroid
 
     fun loadData() {
+        loadAsteroids()
+    }
+
+    private fun loadAsteroids() {
+        loadAsteroidsWithFilter { repository.getAsteroids() }
+    }
+
+    fun loadSavedAsteroids() {
+        loadAsteroidsWithFilter { repository.getSavedAsteroids() }
+    }
+
+    fun loadTodayAsteroids() {
+        loadAsteroidsWithFilter { repository.getTodayAsteroids() }
+    }
+
+    fun loadWeekAsteroids() {
+        loadAsteroidsWithFilter { repository.getWeekAsteroids() }
+    }
+
+    private fun loadAsteroidsWithFilter(loadFunction: suspend () -> List<Asteroid>) {
         viewModelScope.launch {
-            _status.value = NasaApiStatus.LOADING
+            _asteroidStatus.value = NasaApiStatus.LOADING
             try {
-                val asteroidList = repository.getAsteroids()
+                val asteroidList = loadFunction()
                 _asteroids.value = asteroidList
-                _status.value = NasaApiStatus.DONE
-            } catch (e: Exception) {
+                _asteroidStatus.value = NasaApiStatus.DONE
+            } catch (_: Exception) {
                 _asteroids.value = emptyList()
-                _status.value = NasaApiStatus.ERROR
+                _asteroidStatus.value = NasaApiStatus.ERROR
             }
         }
     }
 
-
     fun loadImageOfTheDay() {
         viewModelScope.launch {
-            _status.value = NasaApiStatus.LOADING
+            _imageStatus.value = NasaApiStatus.LOADING
             try {
                 val pictureDay = repository.getImageOfTheDay()
                 _pictureOfTheDay.value = pictureDay
-                _status.value = NasaApiStatus.DONE
-            } catch (e: Exception) {
+                _imageStatus.value = NasaApiStatus.DONE
+            } catch (_: Exception) {
                 _pictureOfTheDay.value = null
-                _status.value = NasaApiStatus.ERROR
+                _imageStatus.value = NasaApiStatus.ERROR
             }
         }
     }
 
     fun getAsteroid(id: Long) {
         viewModelScope.launch {
-            _asteroid.value = repository.getAsteroid(id)
+            try {
+                _asteroid.value = repository.getAsteroid(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
+}
+
+class MenuViewModelFactory(
+    private val application: Application
+) : ViewModelProvider.Factory {
+    
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MenuViewModel::class.java)) {
+            val database = getDatabase(application)
+            val repository = AsteroidRepositoryImpl(database)
+            return MenuViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }
 
 

@@ -17,10 +17,8 @@
     <string name="this_is_nasa_s_picture_of_day_showing_nothing_yet">This is NASA\'s picture of day, showing nothing yet</string>
     <string name="nasa_picture_of_day_content_description_format">NASA\'s picture of day: %s</string>
     <string name="help_absolute_magnitude">Absolute magnitude help</string>
-    <string name="connection_error">Connection error</string>
-    <string name="error_loading_asteroids">Failed to load asteroids. Please try again.</string>
-    <string name="error_loading_picture">Failed to load picture of the day</string>
-    <string name="retry">Retry</string>
-    <string name="no_internet_connection">No internet connection available</string>
+    <string name="view_week_asteroids">View week asteroids</string>
+    <string name="view_today_asteroids">View today asteroids</string>
+    <string name="view_saved_asteroids">View saved asteroids</string>
 
 </resources>

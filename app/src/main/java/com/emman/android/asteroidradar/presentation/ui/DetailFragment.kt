@@ -11,13 +11,16 @@ import androidx.navigation.fragment.navArgs
 import com.emman.android.asteroidradar.R
 import com.emman.android.asteroidradar.databinding.FragmentDetailBinding
 import com.emman.android.asteroidradar.presentation.viewmodels.MenuViewModel
+import com.emman.android.asteroidradar.presentation.viewmodels.MenuViewModelFactory
 
 
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
     private val args: DetailFragmentArgs by navArgs()
-    private val viewModel: MenuViewModel by viewModels()
+    private val viewModel: MenuViewModel by viewModels {
+        MenuViewModelFactory(requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

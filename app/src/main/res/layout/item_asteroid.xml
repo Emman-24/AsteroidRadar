@@ -19,7 +19,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        android:layoutDirection="locale">
+        android:layoutDirection="locale"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="@color/app_background">
 
         <LinearLayout
             android:layout_width="0dp"
