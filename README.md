@@ -87,8 +87,4 @@ The application uses the following configuration defined in `app/build.gradle.kt
 - `API_KEY`: Your NASA API key (Required for fetching data).
 - `BASE_URL`: Defined as `https://api.nasa.gov/` in `build.gradle.kts`.
 
-## Tests
-- **Unit Tests**: Located in `app/src/test/java/com/emman/android/asteroidradar/`. Run with `./gradlew test`.
-- **Instrumentation Tests**: Located in `app/src/androidTest/`. Run with `./gradlew connectedAndroidTest`.
----
 *Created as part of the Android Kotlin Developer Nanodegree.*
