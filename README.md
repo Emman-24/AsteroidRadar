@@ -90,9 +90,5 @@ The application uses the following configuration defined in `app/build.gradle.kt
 ## Tests
 - **Unit Tests**: Located in `app/src/test/java/com/emman/android/asteroidradar/`. Run with `./gradlew test`.
 - **Instrumentation Tests**: Located in `app/src/androidTest/`. Run with `./gradlew connectedAndroidTest`.
-
-## License
-TODO: Add license information here.
-
 ---
 *Created as part of the Android Kotlin Developer Nanodegree.*
