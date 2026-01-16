@@ -1,5 +1,7 @@
 # Asteroid Radar
 
+<img src="Screenshot_20260116_161431.png" width="300">
+
 Asteroid Radar is an Android application that allows users to view asteroids detected by NASA based on their proximity to Earth. It also features the NASA "Picture of the Day."
 
 ## Overview
